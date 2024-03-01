@@ -2,6 +2,48 @@
 
 La Console MVC est un outil en ligne de commande permettant de gérer les tables et les colonnes d'une base de données.
 
+
+## Prérequis
+- PHP >= 7.4.*
+- Composer
+- Node - npm
+- MySQL avec PDO
+
+## Installation
+
+```bash
+  git clone https://github.com/Mts76000/upgrade_mvc.git
+  cd mvc6
+  composer dump-autoload 
+  npm install
+```
+
+
+### Le fichier de configuration
+
+Pour démarrer copier-coller le contenu du fichier config/config-dist.php dans un nouveau fichier config.php
+```php
+/* config/config.php */
+return array(
+    'db_name'   => 'dbname',
+    'db_user'   => 'root',
+    'db_pass'   => '',
+    'db_host'   => 'localhost',
+    
+    'version' => '1.0.0'
+);
+```
+## Serveur php & Webpack
+```bash
+// Pour lancer serveur PHP
+php -S localhost:2323 -t public
+// Pour lancer Webpack
+npm run watch
+// Pour build Webpack
+npm run build
+```
+
+
 ## Commandes Disponibles
 
 ### 1. Créer une Table
