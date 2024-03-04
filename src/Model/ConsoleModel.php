@@ -29,7 +29,7 @@ class ConsoleModel
     public static function createTable($tableName, $tableFields)
     {
         $connection = self::getConnection();
-        $sql = self::generateCreateTableQuery($tableName, $tableFields);
+        $sql = self::generateCreateTable($tableName, $tableFields);
 
         if ($connection->query($sql) === TRUE) {
             echo "\033[35mTable créée avec succès.\n\033[0m";
@@ -40,7 +40,7 @@ class ConsoleModel
         $connection->close();
     }
 
-    private static function generateCreateTableQuery($tableName, $tableFields)
+    private static function generateCreateTable($tableName, $tableFields)
     {
         $sql = "CREATE TABLE $tableName (";
         foreach ($tableFields as $fieldName => $fieldType) {
