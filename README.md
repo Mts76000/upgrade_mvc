@@ -85,8 +85,8 @@ La commande `help` affiche l'aide et la liste des commandes disponibles.
 
 ## Fichiers Modifiés
 
-- `ConsoleModel.php`: Ce fichier contient les méthodes pour gérer les opérations sur les tables et les colonnes de la base de données via la console.
-- `Console.php`: Ce fichier contient toutes les commandes et les appels aux fonctions.
+- `ConsoleModel.php`
+- `Console.php`
 
 
 ## ConsoleModel.php
