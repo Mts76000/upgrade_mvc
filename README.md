@@ -60,21 +60,26 @@ La commande `sup_column` permet de supprimer une colonne d'une table existante.
 
 ### 4. Afficher toutes les Tables
 
+La commande `view_table` permet d'afficher une table en detail.
+
+
+### 5. Afficher toutes les Tables
+
 La commande `list` permet d'afficher la liste de toutes les tables présentes dans la base de données.
 
-### 5. Exporter la Base de Données
+### 6. Exporter la Base de Données
 
 La commande `export_bdd` permet d'exporter toute la base de données dans un fichier SQL.
 
-### 6. Exporter une Table
+### 7. Exporter une Table
 
 La commande `export_table` permet d'exporter le contenu d'une table spécifique dans un fichier SQL.
 
-### 7. Supprimer une Table
+### 8. Supprimer une Table
 
 La commande `sup_table` permet de supprimer une table existante de la base de données.
 
-### 8. Aide
+### 9. Aide
 
 La commande `help` affiche l'aide et la liste des commandes disponibles.
 
