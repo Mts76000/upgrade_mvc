@@ -34,7 +34,7 @@ class ConsoleModel
         if ($connection->query($sql) === TRUE) {
             echo "\033[35mTable créée avec succès.\n\033[0m";
         } else {
-            echo "\033[31mErreur lors de la création de la table : " . $connection->error . "\033[0m";
+            self::echoRed("\033[31mErreur lors de la création de la table : " . $connection->error . "\033[0m");
         }
 
         $connection->close();
@@ -292,7 +292,6 @@ class ConsoleModel
                 echo "Création de la table : \n";
 
                 $tableFields['id'] = 'INT AUTO_INCREMENT PRIMARY KEY';
-
                 self::echoMagenta("Un champ 'id' de type 'INT AUTO_INCREMENT PRIMARY KEY' a été automatiquement ajouté.\n");
 
                 self::createTable($tableName, $tableFields);
@@ -428,33 +427,25 @@ class ConsoleModel
 
     public static function displayHelp()
     {
-        self::echoMagenta("Créer une table -> ");
-        echo "table \n ";
-        self::echoMagenta("Ajouter une colonne dans une table ->");
-        echo " add_column \n ";
-        self::echoMagenta("Supprimer une colonne dans une table -> ");
-        echo " sup_column \n ";
-        self::echoMagenta("Afficher toutes les tables -> ");
-        echo " list \n ";
-        self::echoMagenta("Voir les detail d'un table -> ");
-        echo " view_table \n ";
-        self::echoMagenta("Exporter la base de données -> ");
-        echo " export_bdd \n ";
-        self::echoMagenta("Exporter une table -> ");
-        echo " export_table \n ";
-        self::echoMagenta("Supprimer une table ->");
-        echo " sup_table \n ";
-        self::echoMagenta("Fermeture de la console -> ");
-        echo " quit \n ";
+        echo "Options disponibles:\n\n";
+        echo self::echoYellow("• Créer une table") . " -> table\n";
+        echo self::echoYellow("• Ajouter une colonne dans une table") . " -> add_column\n";
+        echo self::echoYellow("• Supprimer une colonne dans une table") . " -> sup_column\n";
+        echo self::echoYellow("• Afficher toutes les tables") . " -> list\n";
+        echo self::echoYellow("• Voir les détails d'une table") . " -> view_table\n";
+        echo self::echoYellow("• Exporter la base de données") . " -> export_bdd\n";
+        echo self::echoYellow("• Exporter une table") . " -> export_table\n";
+        echo self::echoYellow("• Supprimer une table") . " -> sup_table\n";
+        echo self::echoYellow("• Fermeture de la console") . " -> quit\n \n";
     }
 
     public static function displayTables()
     {
         $tables = self::getAllTables();
         if (!empty($tables)) {
-            self::echoGreen("Tables créées dans la base de données :\n");
+            echo self::echoYellow("Tables dans la base de données :\n ");
             foreach ($tables as $table) {
-                echo "$table\n";
+                echo  " • " . "$table\n";
             }
         } else {
             self::echoRed("Aucune table n'a été trouvée dans la base de données.\n");
@@ -564,6 +555,7 @@ class ConsoleModel
             $tableName = trim(fgets(STDIN));
 
             if (self::tableExists($tableName)) {
+                echo "\033[2J\033[H";
                 break;
             } else {
                 self::echoRed("La table '$tableName' n'existe pas. Veuillez vérifier le nom de la table et réessayer.\n");
@@ -580,7 +572,7 @@ class ConsoleModel
             $columnNames = array_map(function ($field) {
                 return $field->name;
             }, $fields_info);
-            self::echoBlue(implode("\t", $columnNames) . "\n");
+            echo self::echoYellow(implode("\t", $columnNames) . "\n");
 
             while ($row = $result->fetch_assoc()) {
                 $rowData = array_map(function ($value) {
@@ -619,8 +611,15 @@ class ConsoleModel
         echo "\033[35m$text\033[0m";
     }
 
+    public static function echoYellow($text)
+    {
+        return "\033[33m" . $text . "\033[0m";
+    }
+
+
     public static function processCommands()
     {
+        echo "\033[2J\033[H";
         self::displayHelp();
         self::echoBlue("Veuillez entrer votre commande : \n ");
 
@@ -630,35 +629,59 @@ class ConsoleModel
             $command = trim($line);
 
             if ($command == 'table') {
+                echo "\033[2J\033[H";
                 self::createTableFromConsole();
                 self::echoBlue("Veuillez entrer votre commande : \n ");
             } elseif ($command == 'help') {
+                echo "\033[2J\033[H";
                 self::displayHelp();
                 self::echoBlue("Veuillez entrer votre commande : \n ");
             } elseif ($command == 'list') {
+                echo "\033[2J\033[H";
                 self::displayTables();
+                echo "\n ";
                 self::echoBlue("Veuillez entrer votre commande : \n ");
             } elseif ($command == 'sup_table') {
+                echo "\033[2J\033[H";
+                self::displayTables();
+                echo "\n ";
                 self::echoGreen("Nom de la table à supprimer : \n");
                 $tableName = trim(fgets(STDIN));
                 self::deleteTable($tableName);
+
                 self::echoBlue("Veuillez entrer votre commande : \n ");
             } elseif ($command == 'export_bdd') {
+                echo "\033[2J\033[H";
                 self::exportDatabase();
                 self::echoBlue("Veuillez entrer votre commande : \n ");
             } elseif ($command == 'export_table') {
+                echo "\033[2J\033[H";
+                self::displayTables();
+                echo "\n ";
                 self::exportTableFromConsole();
+                echo "\n ";
                 self::echoBlue("Veuillez entrer votre commande : \n ");
             } elseif ($command == 'add_column') {
+                echo "\033[2J\033[H";
+                self::displayTables();
+                echo "\n";
                 self::addColumnFromConsole();
                 self::echoBlue("Veuillez entrer votre commande : \n ");
             } elseif ($command == 'sup_column') {
+                echo "\033[2J\033[H";
+                self::displayTables();
+                echo "\n";
                 self::deleteColumnFromConsole();
                 self::echoBlue("Veuillez entrer votre commande : \n ");
             } elseif ($command == 'view_table') {
+                echo "\033[2J\033[H";
+                self::displayTables();
+                echo "\n";
                 self::viewTable();
+                echo "\n";
                 self::echoBlue("Veuillez entrer votre commande : \n ");
             } elseif ($command == 'quit') {
+                echo "\033[2J\033[H";
                 self::echoBlue("Fermeture de la console... \n");
                 exit;
             } else {
