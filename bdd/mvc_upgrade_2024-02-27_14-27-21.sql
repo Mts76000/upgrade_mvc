@@ -1,6 +1,0 @@
-DROP TABLE IF EXISTS tetjdigjs;
-CREATE TABLE `tetjdigjs` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
