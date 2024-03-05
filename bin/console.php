@@ -25,6 +25,7 @@ function echoMagenta($text)
 }
 
 $validCommand = false;
+ConsoleModel::displayHelp();
 echoBlue("Veuillez entrer votre commande : \n ");
 
 while (!$validCommand) {

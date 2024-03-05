@@ -428,14 +428,22 @@ class ConsoleModel
 
     public static function displayHelp()
 {
-    echoMagenta("Créer une table : table \n ");
-    echoMagenta("Ajouter une colonne dans une table : add_column \n ");
-    echoMagenta("Supprimer une colonne dans une table : sup_column \n ");
-    echoMagenta("Afficher toutes les tables : list \n ");
-    echoMagenta("Exporter la base de données : export_bdd \n ");
-    echoMagenta("Exporter une table : export_table \n ");
-    echoMagenta("Supprimer une table : sup_table \n ");
-    echoMagenta("Fermeture de la console : quit \n ");
+    echoMagenta("Créer une table -> ");
+    echo "table \n ";
+    echoMagenta("Ajouter une colonne dans une table ->");
+    echo " add_column \n ";
+    echoMagenta("Supprimer une colonne dans une table -> ");
+    echo " sup_column \n ";
+    echoMagenta("Afficher toutes les tables -> ");
+    echo " list \n ";
+    echoMagenta("Exporter la base de données -> ");
+    echo " export_bdd \n ";
+    echoMagenta("Exporter une table -> ");
+    echo " export_table \n ";
+    echoMagenta("Supprimer une table ->"); 
+   echo " sup_table \n ";
+    echoMagenta("Fermeture de la console -> ");
+    echo " quit \n ";
 }
 
 public static function displayTables()
