@@ -63,7 +63,7 @@ La commande `sup_column` permet de supprimer une colonne d'une table existante.
 La commande `view_table` permet d'afficher une table en detail.
 
 
-### 5. Afficher toutes les Tables
+### 5. Afficher le detail d'un table
 
 La commande `list` permet d'afficher la liste de toutes les tables présentes dans la base de données.
 
