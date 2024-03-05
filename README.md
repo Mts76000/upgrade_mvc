@@ -196,11 +196,11 @@ class ConsoleModel
         $db_host = $db_info['db_host'];
 
         $timestamp = date('d-m-Y_H-i-s');
-        $backup_directory = 'bdd'; 
+        $backup_directory = 'bdd';
         $backup_file = $backup_directory . '/' . $db_name . '_' . $timestamp . '.sql';
-    
+
         if (!is_dir($backup_directory)) {
-            mkdir($backup_directory, 0755, true); 
+            mkdir($backup_directory, 0755, true);
         }
 
         $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
@@ -251,13 +251,13 @@ class ConsoleModel
         $db_pass = $db_info['db_pass'];
         $db_host = $db_info['db_host'];
 
-      $timestamp = date('d-m-Y_H-i-s');
-    $backup_directory = 'bdd'; 
-    $backup_file = $backup_directory . '/' . $db_name . '_' . $timestamp . '.sql';
+        $timestamp = date('d-m-Y_H-i-s');
+        $backup_directory = 'bdd';
+        $backup_file = $backup_directory . '/' . $db_name . '_' . $timestamp . '.sql';
 
-    if (!is_dir($backup_directory)) {
-        mkdir($backup_directory, 0755, true); 
-    }
+        if (!is_dir($backup_directory)) {
+            mkdir($backup_directory, 0755, true);
+        }
 
         $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
 
@@ -359,11 +359,11 @@ class ConsoleModel
     public static function createTableFromConsole()
     {
         $tableName = '';
-    
+
         while (true) {
-            echoGreen("Nom de la table ? \n ");
+            self::echoGreen("Nom de la table ? \n ");
             $tableName = trim(fgets(STDIN));
-    
+
             if (!self::tableExists($tableName)) {
                 $fieldTypes = array(
                     'INT',
@@ -376,21 +376,21 @@ class ConsoleModel
                     'DOUBLE',
                     'DECIMAL'
                 );
-    
+
                 $tableFields = array();
                 echo "Création de la table : \n";
-    
+
                 $tableFields['id'] = 'INT AUTO_INCREMENT PRIMARY KEY';
-    
-                echoMagenta("Un champ 'id' de type 'INT AUTO_INCREMENT PRIMARY KEY' a été automatiquement ajouté.\n");
-    
+
+                self::echoMagenta("Un champ 'id' de type 'INT AUTO_INCREMENT PRIMARY KEY' a été automatiquement ajouté.\n");
+
                 self::createTable($tableName, $tableFields);
                 break;
             }
-    
-            echoRed("La table '$tableName' existe déjà. Veuillez choisir un autre nom.\n");
+
+            self::echoRed("La table '$tableName' existe déjà. Veuillez choisir un autre nom.\n");
         }
-    
+
         $fieldTypes = array(
             'INT',
             'VARCHAR',
@@ -402,82 +402,82 @@ class ConsoleModel
             'DOUBLE',
             'DECIMAL'
         );
-    
+
         while (true) {
             echo "Nom du champ (ou 'quit' pour terminer) : ";
             $fieldName = trim(fgets(STDIN));
-    
+
             if ($fieldName == 'quit') {
                 break;
             }
-    
+
             if (self::columnExists($tableName, $fieldName)) {
-                echoRed("Le champ '$fieldName' existe déjà. Veuillez choisir un autre nom.\n");
+                self::echoRed("Le champ '$fieldName' existe déjà. Veuillez choisir un autre nom.\n");
                 continue;
             }
-    
+
             if (strtolower($fieldName) === 'id') {
-                echoRed("Vous ne pouvez pas utiliser 'id' comme nom de champ. Veuillez choisir un autre nom.\n");
+                self::echoRed("Vous ne pouvez pas utiliser 'id' comme nom de champ. Veuillez choisir un autre nom.\n");
                 continue;
             }
-    
-            echoGreen("Le champ '$fieldName' peut-il être NULL ? (oui/non) : ");
+
+            self::echoGreen("Le champ '$fieldName' peut-il être NULL ? (oui/non) : ");
             $nullableInput = trim(fgets(STDIN));
-    
+
             $nullable = strtolower($nullableInput) === 'oui' ? 'NULL' : 'NOT NULL';
-    
-            echoGreen("Type du champ (");
+
+            self::echoGreen("Type du champ (");
             foreach ($fieldTypes as $type) {
-                echoGreen("$type, ");
+                self::echoGreen("$type, ");
             }
-            echoGreen(") : ");
+            self::echoGreen(") : ");
             $fieldType = trim(fgets(STDIN));
-    
+
             if (!in_array($fieldType, $fieldTypes)) {
-                echoRed("Type de champ non valide. Veuillez choisir parmi les types suivants : " . implode(', ', $fieldTypes) . "\n");
+                self::echoRed("Type de champ non valide. Veuillez choisir parmi les types suivants : " . implode(', ', $fieldTypes) . "\n");
                 continue;
             }
-    
+
             $fieldSizePart = '';
             if ($fieldType === 'VARCHAR' || $fieldType === 'INT') {
-                echoGreen("Taille du champ (laissez vide pour la valeur par défaut) : ");
+                self::echoGreen("Taille du champ (laissez vide pour la valeur par défaut) : ");
                 $fieldSize = trim(fgets(STDIN));
                 $fieldSizePart = !empty($fieldSize) ? "($fieldSize)" : "";
             }
-    
+
             $tableFields[$fieldName] = "$fieldType$fieldSizePart $nullable";
-    
+
             // Mettre à jour la table avec les champs nouvellement ajoutés
             self::addColumnToTable($tableName, $fieldName, "$fieldType$fieldSizePart $nullable");
         }
     }
-    
+
 
     public static function addColumnFromConsole()
     {
         while (true) {
-            echoGreen("Nom de la table : \n");
+            self::echoGreen("Nom de la table : \n");
             $tableName = trim(fgets(STDIN));
 
             if (!self::tableExists($tableName)) {
-                echoRed("La table '$tableName' n'existe pas. Veuillez vérifier le nom de la table et réessayer.\n");
+                self::echoRed("La table '$tableName' n'existe pas. Veuillez vérifier le nom de la table et réessayer.\n");
                 continue;
             }
 
-            echoGreen("Nom de la colonne à ajouter : \n");
+            self::echoGreen("Nom de la colonne à ajouter : \n");
             $columnName = trim(fgets(STDIN));
 
             if (self::columnExists($tableName, $columnName)) {
-                echoRed("Le nom de la colonne '$columnName' est déjà utilisé dans la table '$tableName'. Veuillez choisir un autre nom.\n");
+                self::echoRed("Le nom de la colonne '$columnName' est déjà utilisé dans la table '$tableName'. Veuillez choisir un autre nom.\n");
                 continue;
             }
 
             if ($columnName === 'id') {
-                echoRed("Vous ne pouvez pas utiliser 'id' comme nom de colonne. Veuillez choisir un autre nom.\n");
+                self::echoRed("Vous ne pouvez pas utiliser 'id' comme nom de colonne. Veuillez choisir un autre nom.\n");
                 continue;
             }
 
-            echoGreen("Type de la colonne (INT, VARCHAR, TEXT, DATE, DATETIME, BOOLEAN, FLOAT, DOUBLE, DECIMAL) : \n");
+            self::echoGreen("Type de la colonne (INT, VARCHAR, TEXT, DATE, DATETIME, BOOLEAN, FLOAT, DOUBLE, DECIMAL) : \n");
             $columnType = trim(fgets(STDIN));
 
             $validTypes = array(
@@ -493,17 +493,17 @@ class ConsoleModel
             );
 
             if (!in_array(strtoupper($columnType), $validTypes)) {
-                echoRed("Type de colonne non valide. Veuillez choisir parmi les types suivants : " . implode(', ', $validTypes) . "\n");
+                self::echoRed("Type de colonne non valide. Veuillez choisir parmi les types suivants : " . implode(', ', $validTypes) . "\n");
                 continue;
             }
 
-            echoGreen("La colonne '$columnName' peut-elle être NULL ? (oui/non) : \n");
+            self::echoGreen("La colonne '$columnName' peut-elle être NULL ? (oui/non) : \n");
             $nullableInput = trim(fgets(STDIN));
             $nullable = strtolower($nullableInput) === 'oui' ? 'NULL' : 'NOT NULL';
 
             $fieldSizePart = '';
             if ($columnType === 'VARCHAR' || $columnType === 'INT') {
-                echoGreen("Taille du champ (laissez vide pour la valeur par défaut) : \n");
+                self::echoGreen("Taille du champ (laissez vide pour la valeur par défaut) : \n");
                 $fieldSize = trim(fgets(STDIN));
                 $fieldSizePart = !empty($fieldSize) ? "($fieldSize)" : "";
             }
@@ -516,128 +516,247 @@ class ConsoleModel
     }
 
     public static function displayHelp()
-{
-    echoMagenta("Créer une table : table \n ");
-    echoMagenta("Ajouter une colonne dans une table : add_column \n ");
-    echoMagenta("Supprimer une colonne dans une table : sup_column \n ");
-    echoMagenta("Afficher toutes les tables : list \n ");
-    echoMagenta("Exporter la base de données : export_bdd \n ");
-    echoMagenta("Exporter une table : export_table \n ");
-    echoMagenta("Supprimer une table : sup_table \n ");
-    echoMagenta("Fermeture de la console : quit \n ");
-}
-
-public static function displayTables()
-{
-    $tables = self::getAllTables();
-    if (!empty($tables)) {
-        echoGreen("Tables créées dans la base de données :\n");
-        foreach ($tables as $table) {
-            echo "$table\n";
-        }
-    } else {
-        echoRed("Aucune table n'a été trouvée dans la base de données.\n");
+    {
+        self::echoMagenta("Créer une table -> ");
+        echo "table \n ";
+        self::echoMagenta("Ajouter une colonne dans une table ->");
+        echo " add_column \n ";
+        self::echoMagenta("Supprimer une colonne dans une table -> ");
+        echo " sup_column \n ";
+        self::echoMagenta("Afficher toutes les tables -> ");
+        echo " list \n ";
+        self::echoMagenta("Voir les detail d'un table -> ");
+        echo " view_table \n ";
+        self::echoMagenta("Exporter la base de données -> ");
+        echo " export_bdd \n ";
+        self::echoMagenta("Exporter une table -> ");
+        echo " export_table \n ";
+        self::echoMagenta("Supprimer une table ->");
+        echo " sup_table \n ";
+        self::echoMagenta("Fermeture de la console -> ");
+        echo " quit \n ";
     }
-}
 
-public static function deleteTable($tableName)
-{
-    while (true) {
-        if (self::tableExists($tableName)) {
-            $result = self::dropTable($tableName);
-            if ($result) {
-                echoMagenta("La table '$tableName' a été supprimée avec succès.\n");
-            } else {
-                echoRed("Erreur lors de la suppression de la table '$tableName'.\n");
+    public static function displayTables()
+    {
+        $tables = self::getAllTables();
+        if (!empty($tables)) {
+            self::echoGreen("Tables créées dans la base de données :\n");
+            foreach ($tables as $table) {
+                echo "$table\n";
             }
-            break; 
         } else {
-            echoRed("La table '$tableName' n'existe pas.\n");
-            echoGreen("Nom de la table à supprimer : \n");
+            self::echoRed("Aucune table n'a été trouvée dans la base de données.\n");
+        }
+    }
+
+    public static function deleteTable($tableName)
+    {
+        while (true) {
+            if (self::tableExists($tableName)) {
+                $result = self::dropTable($tableName);
+                if ($result) {
+                    self::echoMagenta("La table '$tableName' a été supprimée avec succès.\n");
+                } else {
+                    self::echoRed("Erreur lors de la suppression de la table '$tableName'.\n");
+                }
+                break;
+            } else {
+                self::echoRed("La table '$tableName' n'existe pas.\n");
+                self::echoGreen("Nom de la table à supprimer : \n");
+                $tableName = trim(fgets(STDIN));
+            }
+        }
+    }
+
+
+
+    public static function exportTableFromConsole()
+    {
+        $tableName = '';
+
+        while (true) {
+            self::echoGreen("Nom de la table à exporter : \n");
             $tableName = trim(fgets(STDIN));
+
+            if (self::tableExists($tableName)) {
+                self::exportTable($tableName);
+                return;
+            } else {
+                self::echoRed("La table '$tableName' n'existe pas. Veuillez vérifier le nom de la table et réessayer.\n");
+            }
         }
     }
-}
 
 
+    public static function deleteColumnFromConsole()
+    {
+        $tableName = '';
 
-public static function exportTableFromConsole()
-{
-    $tableName = '';
+        while (true) {
+            self::echoGreen("Nom de la table : \n");
+            $tableName = trim(fgets(STDIN));
 
-    while (true) {
-        echoGreen("Nom de la table à exporter : \n");
-        $tableName = trim(fgets(STDIN));
+            if (self::tableExists($tableName)) {
+                break;
+            } else {
+                self::echoRed("La table '$tableName' n'existe pas. Veuillez vérifier le nom de la table et réessayer.\n");
+            }
+        }
 
-        if (self::tableExists($tableName)) {
-            self::exportTable($tableName);
+        $columns = self::getColumnNames($tableName);
+
+        if (count($columns) == 1) {
+            self::echoRed("Impossible de supprimer une colonne de cette table. Une table doit avoir au moins deux colonne.\n");
+            self::echoRed("Utilisez 'sup_table' pour supprimer la table '$tableName'.\n");
             return;
+        }
+
+        while (true) {
+            self::echoGreen("Nom de la colonne à supprimer : \n");
+            $columnName = trim(fgets(STDIN));
+
+            if (!self::columnExists($tableName, $columnName)) {
+                self::echoRed("La colonne '$columnName' n'existe pas dans la table '$tableName'. Veuillez vérifier le nom de la colonne et réessayer.\n");
+            } else {
+                self::dropColumnFromTable($tableName, $columnName);
+                break;
+            }
+        }
+    }
+
+    public static function getColumnNames($tableName)
+    {
+        $connection = self::getConnection();
+        $columns = array();
+
+        $sql = "SHOW COLUMNS FROM $tableName";
+        $result = $connection->query($sql);
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $columns[] = $row['Field'];
+            }
+        }
+
+        $connection->close();
+
+        return $columns;
+    }
+
+    public static function viewTable()
+    {
+        $tableName = '';
+
+        while (true) {
+            self::echoGreen("Nom de la table à afficher : \n");
+            $tableName = trim(fgets(STDIN));
+
+            if (self::tableExists($tableName)) {
+                break;
+            } else {
+                self::echoRed("La table '$tableName' n'existe pas. Veuillez vérifier le nom de la table et réessayer.\n");
+            }
+        }
+
+        $connection = self::getConnection();
+        $sql = "SELECT * FROM $tableName";
+        $result = $connection->query($sql);
+
+        if ($result->num_rows > 0) {
+
+            $fields_info = $result->fetch_fields();
+            $columnNames = array_map(function ($field) {
+                return $field->name;
+            }, $fields_info);
+            self::echoBlue(implode("\t", $columnNames) . "\n");
+
+            while ($row = $result->fetch_assoc()) {
+                $rowData = array_map(function ($value) {
+                    return $value !== null ? $value : "NULL";
+                }, $row);
+                echo (implode("\t", $rowData) . "\n");
+            }
         } else {
-            echoRed("La table '$tableName' n'existe pas. Veuillez vérifier le nom de la table et réessayer.\n");
+            self::echoRed("La table '$tableName' est vide.\n");
+        }
+        $connection->close();
+    }
+
+
+
+
+
+
+    public static function echoGreen($text)
+    {
+        echo "\033[32m$text\033[0m";
+    }
+
+    public static function echoBlue($text)
+    {
+        echo "\033[34m$text\033[0m";
+    }
+
+    public static function echoRed($text)
+    {
+        echo "\033[31m$text\033[0m";
+    }
+
+    public static function echoMagenta($text)
+    {
+        echo "\033[35m$text\033[0m";
+    }
+
+    public static function processCommands()
+    {
+        self::displayHelp();
+        self::echoBlue("Veuillez entrer votre commande : \n ");
+
+        while (true) {
+            $handle = fopen("php://stdin", "r");
+            $line = fgets($handle);
+            $command = trim($line);
+
+            if ($command == 'table') {
+                self::createTableFromConsole();
+                self::echoBlue("Veuillez entrer votre commande : \n ");
+            } elseif ($command == 'help') {
+                self::displayHelp();
+                self::echoBlue("Veuillez entrer votre commande : \n ");
+            } elseif ($command == 'list') {
+                self::displayTables();
+                self::echoBlue("Veuillez entrer votre commande : \n ");
+            } elseif ($command == 'sup_table') {
+                self::echoGreen("Nom de la table à supprimer : \n");
+                $tableName = trim(fgets(STDIN));
+                self::deleteTable($tableName);
+                self::echoBlue("Veuillez entrer votre commande : \n ");
+            } elseif ($command == 'export_bdd') {
+                self::exportDatabase();
+                self::echoBlue("Veuillez entrer votre commande : \n ");
+            } elseif ($command == 'export_table') {
+                self::exportTableFromConsole();
+                self::echoBlue("Veuillez entrer votre commande : \n ");
+            } elseif ($command == 'add_column') {
+                self::addColumnFromConsole();
+                self::echoBlue("Veuillez entrer votre commande : \n ");
+            } elseif ($command == 'sup_column') {
+                self::deleteColumnFromConsole();
+                self::echoBlue("Veuillez entrer votre commande : \n ");
+            } elseif ($command == 'view_table') {
+                self::viewTable();
+                self::echoBlue("Veuillez entrer votre commande : \n ");
+            } elseif ($command == 'quit') {
+                self::echoBlue("Fermeture de la console... \n");
+                exit;
+            } else {
+                self::echoRed("Commande introuvable. Utilisez 'help' pour obtenir de l'aide.\n");
+                self::echoBlue("Veuillez entrer votre commande : \n ");
+            }
         }
     }
 }
-
-
-public static function deleteColumnFromConsole()
-{
-    $tableName = '';
-
-    while (true) {
-        echoGreen("Nom de la table : \n");
-        $tableName = trim(fgets(STDIN));
-
-        if (self::tableExists($tableName)) {
-            break;
-        } else {
-            echoRed("La table '$tableName' n'existe pas. Veuillez vérifier le nom de la table et réessayer.\n");
-        }
-    }
-
-    $columns = self::getColumnNames($tableName);
-
-    if (count($columns) == 1) {
-        echoRed("Impossible de supprimer une colonne de cette table. Une table doit avoir au moins deux colonne.\n");
-        echoRed("Utilisez 'sup_table' pour supprimer la table '$tableName'.\n");
-        return;
-    }
-
-    while (true) {
-        echoGreen("Nom de la colonne à supprimer : \n");
-        $columnName = trim(fgets(STDIN));
-
-        if (!self::columnExists($tableName, $columnName)) {
-            echoRed("La colonne '$columnName' n'existe pas dans la table '$tableName'. Veuillez vérifier le nom de la colonne et réessayer.\n");
-        } else {
-            self::dropColumnFromTable($tableName, $columnName);
-            break;
-        }
-    }
-}
-
-public static function getColumnNames($tableName)
-{
-    $connection = self::getConnection();
-    $columns = array();
-
-    $sql = "SHOW COLUMNS FROM $tableName";
-    $result = $connection->query($sql);
-
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $columns[] = $row['Field'];
-        }
-    }
-
-    $connection->close();
-
-    return $columns;
-}
-
-
-
-}
-
 
 ```
 
@@ -646,74 +765,13 @@ public static function getColumnNames($tableName)
 ## console.php
 
 ```php
-
 <?php
 
 require "./vendor/autoload.php";
 
 use App\Model\ConsoleModel;
 
-function echoGreen($text)
-{
-    echo "\033[32m$text\033[0m";
-}
+ConsoleModel::processCommands();
 
-function echoBlue($text)
-{
-    echo "\033[34m$text\033[0m";
-}
-
-function echoRed($text)
-{
-    echo "\033[31m$text\033[0m";
-}
-
-function echoMagenta($text)
-{
-    echo "\033[35m$text\033[0m";
-}
-
-$validCommand = false;
-echoBlue("Veuillez entrer votre commande : \n ");
-
-while (!$validCommand) {
-    $handle = fopen("php://stdin", "r");
-    $line = fgets($handle);
-    $command = trim($line);
-
-    if ($command == 'table') {
-        ConsoleModel::createTableFromConsole();
-        echoBlue("Veuillez entrer votre commande : \n ");
-    } elseif ($command == 'help') {
-        ConsoleModel::displayHelp();
-        echoBlue("Veuillez entrer votre commande : \n ");
-    } elseif ($command == 'list') {
-        ConsoleModel::displayTables();
-        echoBlue("Veuillez entrer votre commande : \n ");
-    } elseif ($command == 'sup_table') {
-        echoGreen("Nom de la table à supprimer : \n");
-        $tableName = trim(fgets(STDIN));
-        ConsoleModel::deleteTable($tableName);
-        echoBlue("Veuillez entrer votre commande : \n ");
-    } elseif ($command == 'export_bdd') {
-        ConsoleModel::exportDatabase();
-        echoBlue("Veuillez entrer votre commande : \n ");
-    } elseif ($command == 'export_table') {
-        ConsoleModel::exportTableFromConsole();
-        echoBlue("Veuillez entrer votre commande : \n ");
-    } elseif ($command == 'add_column') {
-        ConsoleModel::addColumnFromConsole();
-        echoBlue("Veuillez entrer votre commande : \n ");
-    } elseif ($command == 'sup_column') {
-        ConsoleModel::deleteColumnFromConsole();
-        echoBlue("Veuillez entrer votre commande : \n ");
-    } elseif ($command == 'quit') {
-        echoBlue("Fermeture de la console... \n");
-        exit;
-    } else {
-        echoRed("Commande introuvable. Utilisez 'help' pour obtenir de l'aide.\n");
-        echoBlue("Veuillez entrer votre commande : \n ");
-    }
-}
 ```
 ---
