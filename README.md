@@ -48,7 +48,7 @@ npm run build
 
 ### 1. Créer une Table
 
-La commande `create_table` permet de créer une nouvelle table dans la base de données.
+La commande `table` permet de créer une nouvelle table dans la base de données.
 
 ### 2. Ajouter une Colonne
 
