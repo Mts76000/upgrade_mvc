@@ -196,7 +196,12 @@ class ConsoleModel
         $db_host = $db_info['db_host'];
 
         $timestamp = date('d-m-Y_H-i-s');
-        $backup_file = 'bdd/' . $db_name . '_' . $timestamp . '.sql';
+        $backup_directory = 'bdd'; 
+        $backup_file = $backup_directory . '/' . $db_name . '_' . $timestamp . '.sql';
+    
+        if (!is_dir($backup_directory)) {
+            mkdir($backup_directory, 0755, true); 
+        }
 
         $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
 
@@ -246,8 +251,13 @@ class ConsoleModel
         $db_pass = $db_info['db_pass'];
         $db_host = $db_info['db_host'];
 
-        $timestamp = date('d-m-Y_H-i-s');
-        $backup_file = 'bdd/' . $tableName . '_' . $timestamp . '.sql';
+      $timestamp = date('d-m-Y_H-i-s');
+    $backup_directory = 'bdd'; 
+    $backup_file = $backup_directory . '/' . $db_name . '_' . $timestamp . '.sql';
+
+    if (!is_dir($backup_directory)) {
+        mkdir($backup_directory, 0755, true); 
+    }
 
         $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
 
@@ -627,6 +637,7 @@ public static function getColumnNames($tableName)
 
 
 }
+
 
 ```
 
